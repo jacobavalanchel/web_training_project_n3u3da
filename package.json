@@ -1,6 +1,15 @@
 {
-  "dependencies": {
-    "express": "^5.1.0",
-    "mysql": "^2.18.1"
+  "name": "training",
+  "version": "1.0.0",
+  "main": "class Student.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "devDependencies": {
+    "jest": "^30.0.5"
   }
 }

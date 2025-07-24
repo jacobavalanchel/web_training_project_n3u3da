@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Circle Image from Fetch</title>
+    <style>
+        .circle-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            border: 2px solid #ccc;
+        }
+        .row-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 40px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .fetch-btn, .time-btn, .gender-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 8px 16px;
+            font-size: 16px;
+        }
+        #timeResult {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 18px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 10px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .row-title {
+            margin: 0;
+            font-size: 2em;
+            text-align: center;
+        }
+        .top-title {
+            margin-top: 30px;
+            font-size: 2.2em;
+            text-align: center;
+            font-weight: bold;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .slogan-container {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #sloganResult {
+            font-size: 20px;
+            font-style: italic;
+            color: #333;
+            margin-top: 10px;
+        }
+        .gender-row {
+            margin-top: 30px;
+            text-align: center;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #genderResult {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #444;
+        }
+        .gender-label {
+            font-size: 1.1em;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="top-title">Who will you have your weekend with?</h1>
+    <div class="row-container">
+        <img id="userProfile" class="circle-img" src="" alt="User Profile Image" />
+        <h1 class="row-title">love matching</h1>
+        <img id="profile" class="circle-img" src="" alt="Dog Profile Image" />
+    </div>
+    <button id="fetchBtn" class="fetch-btn">Match!!!</button>
+    <div id="timeResult"></div>
+    
+    <div class="gender-row">
+        <span class="gender-label">Select your parent:</span>
+        <label>
+            <input type="radio" name="parent" value="mother" checked> Mother
+        </label>
+        <label>
+            <input type="radio" name="parent" value="father"> Father
+        </label>
+        <button id="genderBtn" class="gender-btn">Show Gender</button>
+        <div id="genderResult"></div>
+    </div>
+
+    <div class="slogan-container">
+        <h2>Daily Motivation</h2>
+        <div id="sloganResult">Click Match to get your inspirational slogan!</div>
+    </div>
+
+    <script>
+        document.getElementById('fetchBtn').addEventListener('click', function() {
+            // Dog API
+            fetch('https://dog.ceo/api/breeds/image/random')
+                .then(response => response.json())
+                .then(data => {
+                    const imgUrl = data.message;
+                    document.getElementById('profile').src = imgUrl;
+                })
+                .catch(err => {
+                    console.error('Image fetch failed:', err);
+                });
+
+            // Random User API
+            fetch('https://randomuser.me/api/')
+                .then(response => response.json())
+                .then(data => {
+                    const imgUrl = data.results[0].picture.large;
+                    document.getElementById('userProfile').src = imgUrl;
+                })
+                .catch(err => {
+                    console.error('User image fetch failed:', err);
+                });
+
+            // Fetch slogan from local backend
+            fetch('http://localhost:3000/slogans')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Slogan fetched:', data.slogan);
+                    document.getElementById('sloganResult').textContent = data.slogan;
+                })
+                .catch(err => {
+                    console.error('Slogan fetch failed:', err);
+                    document.getElementById('sloganResult').textContent = 'Unable to load slogan. Make sure the backend server is running.';
+                });
+
+            const now = new Date();
+            let daysToAdd = 5 - now.getDay();
+            if (daysToAdd < 0) daysToAdd += 7;
+            const endOfFriday = new Date(now);
+            endOfFriday.setDate(now.getDate() + daysToAdd);
+            });
+        document.getElementById('genderBtn').addEventListener('click', function() {
+            const parent = document.querySelector('input[name="parent"]:checked').value;
+            let gender = '';
+            if (parent === 'mother') {
+                gender = 'Female';
+            } else if (parent === 'father') {
+                gender = 'Male';
+            }
+            document.getElementById('genderResult').textContent = "Gender: " + gender;
+        });
+    </script>
+</body>
+</html>
