@@ -137,7 +137,7 @@
                     list.innerHTML = '';
                     (data.people || []).forEach(row => {
                         const li = document.createElement('li');
-                        li.textContent = row.name + (row.id ? ` (ID: ${row.id})` : '');
+                        li.textContent = `${row.name} (${row.country || 'Unknown'})${row.motto ? ' - ' + row.motto : ''}${row.id ? ` (ID: ${row.id})` : ''}`;
                         list.appendChild(li);
                     });
                 });
