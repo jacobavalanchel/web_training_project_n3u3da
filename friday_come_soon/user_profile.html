@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .profile-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2rem 2.5rem;
+            text-align: center;
+            width: 340px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid #0073b1;
+        }
+        .name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .job {
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .email {
+            color: #0073b1;
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+        .contact-btn {
+            background: #0073b1;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            padding: 0.7rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .contact-btn:hover {
+            background: #005983;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <img class="avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+        <div class="name">Alex Johnson</div>
+        <div class="job">Frontend Developer at TechCorp</div>
+        <span class="email">alex.johnson@email.com</span>
+        <button class="contact-btn">Contact</button>
+    </div>
+<div id="profiles" style="display: flex; gap: 2rem;"></div>
+<script>
+const users = [
+  {
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    name: "Alex Johnson",
+    job: "Frontend Developer at TechCorp",
+    email: "alex.johnson@email.com"
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    name: "Maria Smith",
+    job: "UI/UX Designer at Creatives",
+    email: "maria.smith@email.com"
+  },
+  {
+    avatar: "https://randomuser.me/api/portraits/men/65.jpg",
+    name: "John Lee",
+    job: "Backend Engineer at DataWorks",
+    email: "john.lee@email.com"
+  }
+];
+
+const profilesDiv = document.getElementById('profiles');
+users.forEach(user => {
+  const card = document.createElement('div');
+  card.className = 'profile-card';
+  card.innerHTML = `
+    <img class="avatar" src="${user.avatar}" alt="User Avatar">
+    <div class="name">${user.name}</div>
+    <div class="job">${user.job}</div>
+    <span class="email">${user.email}</span>
+    <button class="contact-btn">Contact</button>
+  `;
+  profilesDiv.appendChild(card);
+});
+</script>
+</body>
+</html>
