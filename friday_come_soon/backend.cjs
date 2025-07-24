@@ -37,14 +37,37 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify({error: 'Invalid parent value. Use "mother" or "father".'}));
         }
     } // Add this inside your server's request handler, after the other routes
-    else if (parsedUrl.pathname === '/prople' && req.method === 'GET') {
-        db.all('SELECT * FROM prople', [], (err, rows) => {
+    else if (parsedUrl.pathname === '/people' && req.method === 'GET') {
+        db.all('SELECT * FROM people', [], (err, rows) => {
             if (err) {
                 res.writeHead(500, {'Content-Type': 'application/json'});
                 res.end(JSON.stringify({error: 'Database error', details: err.message}));
             } else {
                 res.writeHead(200, {'Content-Type': 'application/json'});
-                res.end(JSON.stringify({prople: rows}));
+                res.end(JSON.stringify({people: rows}));
+            }
+        });
+    } else if (parsedUrl.pathname === '/people' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => {
+            body += chunk;
+        });
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(body);
+                db.run('INSERT INTO people (name, country, motto) VALUES (?, ?, ?)',
+                    [data.name, 'chian', 'wuwuwuw '], function (err) {
+                    if (err) {
+                        res.writeHead(500, {'Content-Type': 'application/json'});
+                        res.end(JSON.stringify({error: 'Database error', details: err.message}));
+                    } else {
+                        res.writeHead(201, {'Content-Type': 'application/json'});
+                        res.end(JSON.stringify({id: this.lastID, name: data.name}));
+                    }
+                });
+            } catch (e) {
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify({error: 'Invalid JSON'}));
             }
         });
     } else {
@@ -68,3 +91,12 @@ const db = new sqlite3.Database('friday.sqlite', (err) => {
         console.log('Connected to SQLite database.');
     }
 });
+
+db.all('SELECT * FROM people', [], (err, rows) => {
+    if (err) {
+        console.error('Database error:', err.message);
+    } else {
+        console.log('people table rows:', rows);
+    }
+});
+
